@@ -250,9 +250,11 @@ _CLC_Case #3 - Team 2A.pptx: Chatbot features, risk mitigation strategies, and b
 
 **1. K-means clustering (k=4) on survey responses (11 questions, 7-point Likert scale).**
 Step 1: Choose the optimal number of clusters
+
 <img width="614" alt="image" src="https://github.com/user-attachments/assets/647d19a2-a833-4b69-86f8-31e2d30580ff" />
 
 Step 2: Clustering result (with visualization):
+
 <img width="578" alt="image" src="https://github.com/user-attachments/assets/acf16650-3615-4cc2-967e-cc3004aca0d9" />
 <img width="638" alt="image" src="https://github.com/user-attachments/assets/8d9e95ef-18ac-4591-8e09-0ffdf410f6d7" />
 
