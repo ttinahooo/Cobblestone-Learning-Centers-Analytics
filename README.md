@@ -21,7 +21,7 @@ Every time a student completes one of CLC’s programs, they re-take the assessm
   2. Understand program effectiveness in center-based vs. on-line delivery modality.
   3. CLC is considering adapting the SkillsAdvantage program to an on-line format. We would like to use insight from the transition to on-line tutoring to help decide whether we should pursue this initiative.
 ---
-## 1. Case1:
+## Case1:
 
 ### Project Summary: Enhancing Educational Outcomes through Analytics
 
@@ -126,24 +126,28 @@ ggplot(data = average_scores, aes(x = date)) +
            position = "dodge")
 ```
 ---
-## 2. Case2:
+## Case2:
 
 ### Project Summary: Evaluating New Curricula for the SkillsAdvantage Program
 _Sources: GBA 424 - Team 2A Case 2.pdf, Code - GBA424 Case 2.pdf, Case 2 Memo-2.pdf_
 
 #### (1) Methodology & Findings on Curriculum Effectiveness
 - **Approach** _(Case 2 Memo-2 p.2; GBA 424 p.2-5)_:
-**1. Experimental Design:** Assigned three new curricula (A, B, C) and the current program to 8 districts (e.g., Program B in Camas/Sherwood). Analyzed 9,035 students’ intake and post-program scores.
+  
+1. Experimental Design: Assigned three new curricula (A, B, C) and the current program to 8 districts (e.g., Program B in Camas/Sherwood). Analyzed 9,035 students’ intake and post-program scores.
 - Participants: 9,035 students across 8 districts.
 - Treatment/control groups: Three new curricula (A, B, C) + current program, assigned to districts:
-A: Lake Oswego, Ridgefield
-B: Camas, Sherwood
-C: Riverdale, Wilsonville
-Current: St. Paul, Beaverton
+
+|Curricula | Districts|
+|:----------: |:----------: |
+|A | Lake Oswego, Ridgefield|
+|B | Camas, Sherwood|
+|C | Riverdale, Wilsonville|
+|Current | St. Paul, Beaverton|
 
 - Data Collected: Intake and post-program assessment scores (Reading, Writing, Math Calc/NoCalc, Total).
 
-**2. Statistical Analysis** _(GBA 424, p.4-6; Code, p.2-5,9)_
+2. Statistical Analysis _(GBA 424, p.4-6; Code, p.2-5,9)_
 
 - ANOVA & Tukey’s HSD: Compared mean differences in Delta_total (post-program − intake scores).
 
@@ -157,7 +161,7 @@ sumscore_delta ~ sumscore + delta_date + edu_program (baseline impact).
 Interaction terms (sumscore*edu_program) to control for district-level bias.
 ```
 
-- Difference-in-Differences (DiD): isFinished*edu_program to isolate program effects.
+- Tried Difference-in-Differences (DiD): isFinished*edu_program to isolate program effects, but shouldn't use DiD here because there's no common trend before the experinment.
 
 **3. Visualization** _(Code, p.5-6,12)_
 
@@ -223,6 +227,137 @@ Pilot testing to address district bias.
 
 Cost-benefit analysis before full-scale rollout.
 
-**Workflow:** Data cleaning → Descriptive stats → Visualization → Hypothesis testing → Regression modeling. Advanced techniques (DiD, interaction terms) ensured robust conclusions despite non-randomized design.
+**Workflow:** Data cleaning → Descriptive stats → Visualization → Hypothesis testing → Regression modeling. Advanced techniques (interaction terms) ensured robust conclusions despite non-randomized design.
+
+
+---
+## Case3:
+
+### Project Summary: AI-Powered Chatbot for Personalized Online Learning
+_Sources:_
+
+_Case 3 Memo.pdf: Survey design, student preferences, and response scales._
+
+_case3.pdf: Clustering results, student profiles, and recommendations._
+
+_CLC_Case #3 - Team 2A.pptx: Chatbot features, risk mitigation strategies, and business objectives._
+
+#### (1) Methodology & Findings on Student Segmentation (Clustering)
+
+- **Approach** _case3.pdf (Pages 2-4)_:
+  
+**0. Descriptive analysis on Survey data**
+
+**1. K-means clustering (k=4) on survey responses (11 questions, 7-point Likert scale).**
+Step 1: Choose the optimal number of clusters
+<img width="614" alt="image" src="https://github.com/user-attachments/assets/647d19a2-a833-4b69-86f8-31e2d30580ff" />
+
+Step 2: Clustering result (with visualization):
+<img width="578" alt="image" src="https://github.com/user-attachments/assets/acf16650-3615-4cc2-967e-cc3004aca0d9" />
+<img width="638" alt="image" src="https://github.com/user-attachments/assets/8d9e95ef-18ac-4591-8e09-0ffdf410f6d7" />
+
+**2. Give recommendations for each group:**
+
+Example: (Variables are survey questions)
+
+<img width="508" alt="image" src="https://github.com/user-attachments/assets/b86eb437-4517-44cd-90e0-4e59531a7423" />
+<img width="535" alt="image" src="https://github.com/user-attachments/assets/3e1e3b8a-2615-46ac-980f-e1122b5f9e36" />
+<img width="559" alt="image" src="https://github.com/user-attachments/assets/5f6b98b3-9e40-4193-9cec-9c508395a54e" />
+
+#### (2) Chatbot Design Based on Segmentation
+
+- **Approach** _CLC_Case #3 - Team 2A.pptx (Slides 2-5)_
+  
+1. Prioritized features aligned with cluster preferences (e.g., time management tools for Reserved Planners).
+2. Embedded ethical AI rules (e.g., no data storage).
+
+#### (3) Risk Mitigation
+
+- **Approach** _case3.pdf (Pages 8-9); CLC_Case #3 - Team 2A.pptx (Slide 5)_
+  
+Addressed privacy (anonymized data) and bias (neutral tone).
+
+#### (4) Key Functions & Techniques
+
+1. Clustering: kmeans() to segment students (case3.pdf, Page 3).
+2. Descriptive Stats: Mean scores per question group (G/S/A/T) (case3.pdf, Page 4).
+3. Chatbot Logic: Custom prompts for each cluster (CLC_Case #3, Slide 4).
+
+#### (5) Sample Coding
+
+- Visualization
+```r
+ggplot(dt, aes(x=G1)) + geom_histogram()  # Histogram for single question
+dt_melt <- melt(dt, "ID")                 # Reshape for boxplots
+ggplot(dt_melt, aes(x=variable, y=value)) + geom_boxplot()  # Compare all questions
+```
+
+- Feature Standardization
+ ```r
+#Normalize Likert-scale responses (1–7) for clustering
+dt_norm <- apply(dt, 2, function(x) {(x - mean(x))/sd(x)})  # Z-score normalization
+```
+- Determine Optimal Clusters (k)
+```r
+ fviz_nbclust(dt_norm, kmeans, method="silhouette",
+             iter.max=100, nstart=20, k.max=15)
+```
+-------
+-------
+## quick segmentation review:
+
+**(1) Criteria for a Useful Segmentation**: 
+1. homogenity within & Heterogenity between;
+2. systematic behaviors(interaction effects. _The bigger the interaction, the better the segmentation variable_. Because: A large interation means _the effect of one variable_, e.g. discount, _depends heavily on another variable_, e.g. age/region/past purchases, so those groups are well seperated, thus better segmented: a 10% discount increases sales by 5% for urban customers but 20% for rural customers, making location a key segmentation variable for pricing strategies);
+3. marketing mix efficiency (cost-driven/demand-driven/..) For different dicision, we may have different segmentation variables. 
+
+**(2) Segmentation Methods**: 
+1. **A priori segmentation**: we already have the segment definition, like demographic, geographic, firmographic, .. we don't need to use any statistical method
+2. **Post hoc segmentation**: segments created with unsupervised ml, typically have large numbers of variables(5-20), like preferences for diff snacks, attitudes,..
+
+**Post hoc Segmentation**: Cluster Analysis is commonly used in this topic. And K-means is one type of Cluster Analysis.
+
+**1. First consider feature scaling/standardization**
+
+Reason: Distance-based models _(e.g., KNN, K-means, SVM)_ are sensitive to scales; Gradient-based models _(e.g., linear regression, neural networks)_ converge faster. Avoid Feature Dominance: the model will overly rely on B if Feature B ranges large
+
+Some methods: 
+|Method|When to Use|
+|:------:|:-----:|
+|Standardization (Z-score)|Data is near Gaussian (normal)|
+|Min-Max Scaling|Bounded data (e.g., image pixels 0-255)|
+```r
+dt_norm <- apply(dt, 2, function(x) {(x - mean(x))/sd(x)})
+```
+
+**2. Choose Number of Clusters**
+Methods: Elbow rule,..
+```r
+## WSS plot - look for the "elbow" point where WSS starts decreasing linearly → optimal k.
+fviz_nbclust(dt_norm,kmeans,method="wss",iter.max=100,nstart=20,k.max=15)
+
+## Avg silhouette width - find max (The k with the highest silhouette score is optimal.)
+fviz_nbclust(dt_norm,kmeans,method="silhouette",iter.max=100,nstart=20,k.max=15) 
+```
+
+**3. [Segmentation](https://rpkgs.datanovia.com/factoextra/reference/fviz_cluster.html)**
+```r
+fviz_cluster(km, geom = "point", data = dt_norm) + ggtitle(paste("k =",nClust))+
+    scale_colour_manual(values = c("#f8d86a", "#eeb8c3", "#9abeaf","#619ac3")) +
+    scale_fill_manual(values = c("#f8d86a", "#eeb8c3", "#9abeaf","#619ac3")) 
+```
+**4. Confusion matrix**
+Compares k-means clusters (converted to "AB"/"NO") with true labels (class).
+Reports accuracy, precision, recall, etc., to validate clustering quality.
+```r
+dt$cluster <- as.factor(ifelse(dt$cluster=='1','AB','NO'))
+confusionMatrix(vc$class, vc$cluster)  # From `caret` package
+```
+
+-------
+-------
+
+
+
 
 
