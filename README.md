@@ -80,7 +80,6 @@ _(All from Case 1 p.14)_:
 5. **Expand online courses** (+4.98 Reading impact, p.11)
 
 
-
 #### (6) Key Functions Used
 
 1. **Data Wrangling:** group_by(), summarise(), mutate(), filter()
@@ -127,3 +126,103 @@ ggplot(data = average_scores, aes(x = date)) +
            position = "dodge")
 ```
 ---
+## 2. Case2:
+
+### Project Summary: Evaluating New Curricula for the SkillsAdvantage Program
+_Sources: GBA 424 - Team 2A Case 2.pdf, Code - GBA424 Case 2.pdf, Case 2 Memo-2.pdf_
+
+#### (1) Methodology & Findings on Curriculum Effectiveness
+- **Approach** _(Case 2 Memo-2 p.2; GBA 424 p.2-5)_:
+**1. Experimental Design:** Assigned three new curricula (A, B, C) and the current program to 8 districts (e.g., Program B in Camas/Sherwood). Analyzed 9,035 students’ intake and post-program scores.
+- Participants: 9,035 students across 8 districts.
+- Treatment/control groups: Three new curricula (A, B, C) + current program, assigned to districts:
+A: Lake Oswego, Ridgefield
+B: Camas, Sherwood
+C: Riverdale, Wilsonville
+Current: St. Paul, Beaverton
+
+- Data Collected: Intake and post-program assessment scores (Reading, Writing, Math Calc/NoCalc, Total).
+
+**2. Statistical Analysis** _(GBA 424, p.4-6; Code, p.2-5,9)_
+
+- ANOVA & Tukey’s HSD: Compared mean differences in Delta_total (post-program − intake scores).
+
+- Regression Models:
+
+```r 
+sumscore_delta ~ sumscore + delta_date + edu_program (baseline impact).
+```
+
+```r
+Interaction terms (sumscore*edu_program) to control for district-level bias.
+```
+
+- Difference-in-Differences (DiD): isFinished*edu_program to isolate program effects.
+
+**3. Visualization** _(Code, p.5-6,12)_
+
+- Violin plots: Score distributions by program.
+
+- Histograms/Boxplots: Subject-wise trends (e.g., MathNoCalc vs. Writing).
+
+**4. Key Insights** _(GBA 424, p.7-8)_
+1. Program B had the highest impact:
+
+  +13.76 mean Delta_total vs. Program A (Tukey’s HSD, p.5).
+
+  +86.47 vs. Program C, which performed worst (−72.71 Delta_total vs. A).
+
+2. Non-Randomization Bias:
+
+  Districts assigned to Program B (Camas/Sherwood) had higher baseline scores.
+
+  Regression with interaction terms (sumscore*edu_program) adjusted for this (Code, p.9).
+
+3. Program A showed strengths in Reading/Writing, suggesting a hybrid approach (A+B) could optimize outcomes.
+
+#### (2) Recommendations & Business Implications
+**Actionable Insights** _(GBA 424, p.8-9)_
+1. Adopt Program B for its consistent superiority, but combine with Program A’s strengths (e.g., reading/writing focus).
+
+2. Conduct Cost-Benefit Analysis: Weigh performance gains against implementation costs.
+
+3. Pilot Testing: Roll out Program B in additional districts to validate real-world efficacy.
+
+4. Survey Design after the Analysis.
+
+**Limitations**
+District Bias: Non-random assignment may inflate Program B’s apparent success.
+
+#### (3) Key Functions & Techniques
+**Statistical Tests: ANOVA & Tukey’s HSD**
+```r
+model1 <- aov(Delta_total ~ educational_program, data = delta_experiment)  
+TukeyHSD(model1)
+```
+**Visualization: Violin Plots (Compared score distributions by program)**
+```r
+ggplot(dt_melt_program, aes(x = edu_program, y = meandelta)) +  
+  geom_violin() +  
+  stat_summary(fun = "mean", geom = "point", color = "red")
+```
+
+**Notable Techniques**
+
+
+**ANOVA & Tukey’s HSD** – Compared mean score differences across programs.
+**Interaction Terms in Regression** – Controlled for district-level bias (e.g., sumscore*edu_program).
+**Percentage Change Metrics** - Normalized deltas (e.g., delta_r/(score_reading - delta_r)) for fair comparisons.
+**Violin Plots** – Visualized score distributions (intake vs. post-program) by program.
+
+**Conclusion**
+The analysis strongly supports adopting Program B, but emphasizes:
+
+Hybridization with Program A’s strengths.
+
+Pilot testing to address district bias.
+
+Cost-benefit analysis before full-scale rollout.
+
+**Workflow:** Data cleaning → Descriptive stats → Visualization → Hypothesis testing → Regression modeling. Advanced techniques (DiD, interaction terms) ensured robust conclusions despite non-randomized design.
+
+
